@@ -11,6 +11,7 @@ export class ArtistaComponent implements OnInit {
 
   artista: any = {};
   loading: boolean;
+  topTracks: any[] = [];
 
   constructor(private activatedRoute: ActivatedRoute, private spotifyService: SpotifyService) {
     this.loading = true;
@@ -26,6 +27,7 @@ export class ArtistaComponent implements OnInit {
       if (params.has('id')) {
         const id = params.get('id');
         this.getArtista(id);
+        this.getTopTracks(id);
         this.loading = false;
         // this.mensajeSinResultados = `No se encontraron resultados para la busqueda "${id}".`;
       }
@@ -33,8 +35,18 @@ export class ArtistaComponent implements OnInit {
   }
 
   getArtista(id: string) {
+    this.loading = true;
     this.spotifyService.getArtista(id).subscribe(artista => {
       this.artista = artista;
+      this.loading = false;
+    });
+  }
+
+  getTopTracks(id: string) {
+    this.loading = true;
+    this.spotifyService.getTopTracks(id).subscribe(topTracks => {
+      this.topTracks = topTracks;
+      this.loading = false;
     });
   }
 
